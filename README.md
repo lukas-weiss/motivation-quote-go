@@ -4,5 +4,9 @@
 
 This project contains source code and supporting files for a serverless application to get a random motivation quote from famous athletes.
 
+
+## Developmnet
+Following the [Google Styleguide](https://google.github.io/styleguide/go/)
+
 ## Quotes
 TBD
