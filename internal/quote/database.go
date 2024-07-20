@@ -55,8 +55,8 @@ func QueryQuoteByID(id string) []map[string]types.AttributeValue {
 // Returns:
 // - int64: the item count of the table
 func DescribeQuoteTable() int64 {
+	// infos in describe table only getting update every 6 hours
 	svc := getConnection()
-
 	result, err := svc.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
 		TableName: aws.String(os.Getenv(quoteTableNamEnv)),
 	})

@@ -33,3 +33,4 @@ Quotes are stored in DynamoDB expecting a table with the name `motivation-quote-
 
 - AWS_REGION - the AWS region automatically available in AWS Lambda
 - QUOTE_TABLE_NAME - the name of the DynamoDB table
+- MAX_QUOTES - the maximum number of quotes in the database
