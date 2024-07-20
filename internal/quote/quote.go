@@ -23,13 +23,13 @@ func GetQuote() Quote {
 
 func getRamdomID() string {
 	// min can be a fixed value because we start with our ID in the database with 1
-	min := 1
-	// TODO: move max count as ENV VAR because a scan is not an option
-	max := 3
+	var min int64 = 1
+	// TODO: move to env variable
+	var max int64 = DescribeTableByName("motivation-quote-go")
 	// generate a random integer between min and max while min is the minimum value and not 0
-	id := rand.Intn(max-min+1) + min
+	id := rand.Int63n(max-min+1) + min
 	// convert the integer to string because DynamoDB only supports float values
-	return strconv.Itoa(id)
+	return strconv.FormatInt(id, 10)
 }
 
 func getQuoteFromDb(id string) Quote {
