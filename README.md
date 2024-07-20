@@ -28,3 +28,8 @@ Quotes are stored in DynamoDB expecting a table with the name `motivation-quote-
 | id  | author     | quote              |
 | --- | ---------- | ------------------ |
 | "1" | "Joe Gurt" | "nice to meet you" |
+
+## Rquired environment variables
+
+- AWS_REGION - the AWS region automatically available in AWS Lambda
+- QUOTE_TABLE_NAME - the name of the DynamoDB table
