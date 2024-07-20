@@ -25,14 +25,13 @@ func getConnection() *dynamodb.Client {
 }
 
 // QueryQuoteByID retrieves a quote from the database based on the provided ID.
-//
 // Parameter:
 // - id: the ID of the quote to retrieve.
 // Returns an interface{} containing the retrieved quote.
 func QueryQuoteByID(id string) []map[string]types.AttributeValue {
 	svc := getConnection()
 	result, err := svc.Query(context.TODO(), &dynamodb.QueryInput{
-		// TODO: how to have not hardcoded value
+		// TODO: move to env variable
 		TableName: aws.String("motivation-quote-go"),
 		KeyConditions: map[string]types.Condition{
 			"id": {
@@ -49,4 +48,22 @@ func QueryQuoteByID(id string) []map[string]types.AttributeValue {
 	}
 
 	return result.Items
+}
+
+// DescribeTableByName retrieves information about a DynamoDB table by name.
+// Parameters:
+// - tableName: the name of the DynamoDB table
+// Returns:
+// - int64: the item count of the table
+func DescribeTableByName(tableName string) int64 {
+	svc := getConnection()
+
+	result, err := svc.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
+		TableName: aws.String(tableName),
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return *result.Table.ItemCount
 }
