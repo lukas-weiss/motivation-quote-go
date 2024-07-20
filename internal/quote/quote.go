@@ -3,6 +3,7 @@ package quote
 import (
 	"log"
 	"math/rand"
+	"os"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -23,13 +24,16 @@ func GetQuote() Quote {
 
 func getRamdomID() string {
 	// min can be a fixed value because we start with our ID in the database with 1
-	var min int64 = 1
-	// TODO: this is not a live item count, will be updated every 6 hours by DynamoDB
-	var max int64 = DescribeQuoteTable()
+	min := 1
+	// solved as environment variable because describe table is update in a 6 hours interval and we don't want to do a scan every time
+	max, err := strconv.Atoi(os.Getenv("MAX_QUOTES"))
+	if err != nil {
+		panic(err)
+	}
 	// generate a random integer between min and max while min is the minimum value and not 0
-	id := rand.Int63n(max-min+1) + min
+	id := rand.Intn(max-min+1) + min
 	// convert the integer to string because DynamoDB only supports float values
-	return strconv.FormatInt(id, 10)
+	return strconv.Itoa(id)
 }
 
 func getQuoteFromDb(id string) Quote {
