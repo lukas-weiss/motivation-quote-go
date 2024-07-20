@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
+const quoteTableNamEnv = "QUOTE_TABLE_NAME"
+
 func getConnection() *dynamodb.Client {
 	cfg, err := config.LoadDefaultConfig(context.TODO(), func(o *config.LoadOptions) error {
 		o.Region = os.Getenv("AWS_REGION")
@@ -31,8 +33,7 @@ func getConnection() *dynamodb.Client {
 func QueryQuoteByID(id string) []map[string]types.AttributeValue {
 	svc := getConnection()
 	result, err := svc.Query(context.TODO(), &dynamodb.QueryInput{
-		// TODO: move to env variable
-		TableName: aws.String("motivation-quote-go"),
+		TableName: aws.String(os.Getenv(quoteTableNamEnv)),
 		KeyConditions: map[string]types.Condition{
 			"id": {
 				ComparisonOperator: types.ComparisonOperatorEq,
@@ -50,16 +51,14 @@ func QueryQuoteByID(id string) []map[string]types.AttributeValue {
 	return result.Items
 }
 
-// DescribeTableByName retrieves information about a DynamoDB table by name.
-// Parameters:
-// - tableName: the name of the DynamoDB table
+// DescribeQuoteTable retrieves information about a DynamoDB table by name.
 // Returns:
 // - int64: the item count of the table
-func DescribeTableByName(tableName string) int64 {
+func DescribeQuoteTable() int64 {
 	svc := getConnection()
 
 	result, err := svc.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
-		TableName: aws.String(tableName),
+		TableName: aws.String(os.Getenv(quoteTableNamEnv)),
 	})
 	if err != nil {
 		panic(err)
